@@ -27,9 +27,14 @@ def computerPlay():
 
 while sum != 100:
     print("Sum is", sum)
-    userInput = int(input("Type your number: "))
     # Check if between 1 and 10
-
+    while True:
+        userInput = int(input("Type your number: "))
+        if (0 < userInput <= 10):
+            #Valid input
+            break
+        else:
+            print("Invalid number. Must be between 1 and 10")
     checkResult(userInput, "You")
     print("Sum is", sum)
     print("Computer says", computerPlay())
