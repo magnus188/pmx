@@ -19,6 +19,7 @@ def computerPlay():
     if (sum == 0):
         return 1  
     elif (sum > 0 and sum < 90):
+        # Choose the best number
         for i in range(len(goldenNumbers)):
             if (sum < goldenNumbers[i]):
                 return goldenNumbers[i] - sum
@@ -34,9 +35,10 @@ while sum != 100:
             #Valid input
             break
         else:
+            #Invalid input
             print("Invalid number. Must be between 1 and 10")
     checkResult(userInput, "You")
     print("Sum is", sum)
     print("Computer says", computerPlay())
-    checkResult(computerPlay(), "Computer")
+    checkResult(computerPlay(), "Computer won")
     
