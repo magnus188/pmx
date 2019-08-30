@@ -1,7 +1,6 @@
-import random
-
 print("Skriv inn et tall mellom 1 og 10")
 
+# Golden numbers to reach
 goldenNumbers = [12,23,34,45,56,67,78,89]
 sum = 0
 
