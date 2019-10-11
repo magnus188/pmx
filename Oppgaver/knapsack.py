@@ -9,8 +9,8 @@ def packBag(maxWeight, w, p, n):
   
    # weight is not greater, return the optimal of the two
     else: 
-        return max(p[n-1] + packBag(maxWeight-w[n-1] , w , p , n-1), 
-                   packBag(maxWeight , w , p , n-1)) 
+        return max(p[n-1] + packBag(maxWeight-w[n-1], w, p, n-1), 
+                   packBag(maxWeight, w, p, n-1)) 
   
 
 prices = [250, 175, 400, 200, 500, 125, 500, 250, 175, 250, 100] 
