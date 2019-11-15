@@ -62,6 +62,7 @@ def eatFood():
 def drawSnake(dir):
     global x_pos
     global y_pos
+
     #draw background color to blank the screen
     canvas.fill((0,0,0))
     createFood()
@@ -91,10 +92,11 @@ def drawSnake(dir):
         eatFood()
 
     # check if snake collides with walls
-    if (tail[0]['x'] == WIDTH-snakeBlockSize or tail[0]['x'] == 0 or tail[0]['y'] == HEIGHT-snakeBlockSize or tail[0]['y'] == 0):
+    if (tail[0]['x'] >= WIDTH-snakeBlockSize or tail[0]['x'] <= 0 or tail[0]['y'] >= HEIGHT-snakeBlockSize or tail[0]['y'] <= 0):
         quitGame()
 
 def quitGame():
+    global running
     length = 3
     print('U die')
     running = False
@@ -127,4 +129,8 @@ while True:
                 if e.type == pygame.QUIT:
                         pygame.quit()
 
-        pygame.display.flip()
+    else:
+        print('hello')            
+        break
+
+    pygame.display.flip()
