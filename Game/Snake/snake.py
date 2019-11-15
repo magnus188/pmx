@@ -6,32 +6,21 @@ import time
 # ikke bite seg selv
 # ikke kræsj i veggen
 
-
-global x_pos
-global y_pos
-global length
-global speed
-global running
-global tail
-global direction
-
-x_pos = 50
-y_pos = 10
+x_pos = 100
+y_pos = 300
 length = 3
 speed = 0.5
 running = True
 tail = []
-direction = 'LEFT'
-
-# initialize snake
-for i in range(0,length-1,40):
-    tail.append({'x': x_pos+i, 'y': y_pos+i})
-
-print(tail)
-
+direction = 'RIGHT'
+foodSize = 20
+snakeBlockSize = 35
+score = length
+foodPos = (200,200)
+foodOnMap = False
 
 #Frames pr second
-FPS=24
+FPS=100
 
 #window size
 WIDTH=600
@@ -44,37 +33,79 @@ pygame.display.set_caption('SNAKE')
 # creates a clock
 clock=pygame.time.Clock()
 
+# initialize snake
+for i in range(0,length):
+    tail.append({'x': x_pos-i*40, 'y': y_pos})
+    pygame.draw.rect(canvas, (255,255,255), (tail[i]['x'],tail[i]['y'],snakeBlockSize, snakeBlockSize))
+
+def createFood():
+    global foodOnMap
+
+    if not foodOnMap:
+        foodPos = (random.randint(0,WIDTH-foodSize), random.randint(0,HEIGHT-foodSize))
+    pygame.draw.rect(canvas, (255,255,255), (foodPos[0],foodPos[1],foodSize, foodSize))
+
+def eatFood():
+    global score
+    global length
+    global foodOnMap
+
+    foodOnMap = False
+    score += 1
+    length += 1
+
+    tail.append({'x': tail[-1]['x'], 'y': tail[-1]['y']})
+
 # create snake
-def drawSnake(x, y, dir):
+def drawSnake(dir):
+    global x_pos
+    global y_pos
     #draw background color to blank the screen
     canvas.fill((0,0,0))
+    createFood()
 
-    if (dir == 'LEFT' and dir != 'RIGHT'):
-        tail.insert(0,{'x': x+40, 'y': y})
-        tail.pop(-1)
-    elif (dir == 'RIGHT' and dir != 'LEFT'):
-        tail.insert(0,{'x': x-40, 'y': y})
-        tail.pop(-1)
-    elif (dir == 'UP' and dir != 'DOWN'):
-        tail.insert(0,{'x': x, 'y': y+40})
-        tail.pop(-1)
-    elif (dir == 'DOWN' and dir != 'UP'):
-        tail.insert(0,{'x': x, 'y': y-40})
-        tail.pop(-1)
+    if (dir == 'LEFT'):
+        x_pos -= 40
+        tail.insert(0,{'x': x_pos, 'y': y_pos})
+        tail.pop()
+    elif (dir == 'RIGHT'):
+        x_pos += 40
+        tail.insert(0,{'x': x_pos, 'y': y_pos})
+        tail.pop()
+    elif (dir == 'UP'):
+        y_pos -= 40
+        tail.insert(0,{'x': x_pos, 'y': y_pos})
+        tail.pop()
+    elif (dir == 'DOWN'):
+        y_pos += 40
+        tail.insert(0,{'x': x_pos, 'y': y_pos})
+        tail.pop()
 
-    for i in range(0,length-1):
-        print(i)
-        pygame.draw.rect(canvas, (255,255,255), (tail[i]['x'],tail[i]['y'],35,35))
+    for i in range(0,length):
+       pygame.draw.rect(canvas, (255,255,255), (tail[i]['x'],tail[i]['y'],snakeBlockSize, snakeBlockSize))
+    
+    # check if snake collides with food
+    if (collide(tail[0]['x'], foodPos[0], tail[0]['y'], foodPos[1], snakeBlockSize, foodSize, snakeBlockSize, foodSize)):
+        eatFood()
+
+    # check if snake collides with walls
+    if (tail[0]['x'] == WIDTH or tail[0]['x'] == 0 or tail[0]['y'] == HEIGHT or tail[0]['y'] == 0):
+        quitGame()
 
 def quitGame():
     length = 3
     running = False
     #TODO: Show menu
 
+#check if two elements collide
+def collide(x1, x2, y1, y2, w1, w2, h1, h2):
+	if (x1+w1>x2 and x1<x2+w2 and y1+h1>y2 and y1<y2+h2):return True
+	else:return False
+
 while True:
-    #time.sleep (100.0 / 1000.0)
-    drawSnake(x_pos, y_pos, direction)
     if running:
+        time.sleep (100.0 / 500.0)
+        drawSnake(direction)
         for e in pygame.event.get():
                 if e.type == pygame.KEYDOWN:
                     if (e.key == pygame.K_LEFT):
@@ -93,4 +124,4 @@ while True:
                 if e.type == pygame.QUIT:
                         pygame.quit()
 
-    pygame.display.flip()
+        pygame.display.flip()
