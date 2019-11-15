@@ -1,6 +1,6 @@
 import pygame
 import random
-import time
+
 
 # RULES:
 # ikke bite seg selv
@@ -20,7 +20,7 @@ foodPos = (200,200)
 foodOnMap = False
 
 #Frames pr second
-FPS=100
+FPS=8
 
 #window size
 WIDTH=600
@@ -40,9 +40,11 @@ for i in range(0,length):
 
 def createFood():
     global foodOnMap
+    global foodPos
 
     if not foodOnMap:
         foodPos = (random.randint(0,WIDTH-foodSize), random.randint(0,HEIGHT-foodSize))
+        foodOnMap = True
     pygame.draw.rect(canvas, (255,255,255), (foodPos[0],foodPos[1],foodSize, foodSize))
 
 def eatFood():
@@ -89,11 +91,12 @@ def drawSnake(dir):
         eatFood()
 
     # check if snake collides with walls
-    if (tail[0]['x'] == WIDTH or tail[0]['x'] == 0 or tail[0]['y'] == HEIGHT or tail[0]['y'] == 0):
+    if (tail[0]['x'] == WIDTH-snakeBlockSize or tail[0]['x'] == 0 or tail[0]['y'] == HEIGHT-snakeBlockSize or tail[0]['y'] == 0):
         quitGame()
 
 def quitGame():
     length = 3
+    print('U die')
     running = False
     #TODO: Show menu
 
@@ -104,7 +107,7 @@ def collide(x1, x2, y1, y2, w1, w2, h1, h2):
 
 while True:
     if running:
-        time.sleep (100.0 / 500.0)
+        clock.tick(FPS)
         drawSnake(direction)
         for e in pygame.event.get():
                 if e.type == pygame.KEYDOWN:
