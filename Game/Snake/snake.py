@@ -6,9 +6,9 @@ import math
 WIDTH = 600
 HEIGHT = 600
 
-x_pos = 100
-y_pos = 300
-length = 3
+x_pos = 120
+y_pos = 280
+length = 8
 speed = 0.5
 running = True
 tail = []
@@ -23,11 +23,16 @@ possiblePos = [x for x in range(0, WIDTH-gridBlock) if x % gridBlock == 0]
 
 
 # Frames pr second
-FPS = 6
+FPS = 8
 
 pygame.init()
 canvas = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('SNAKE')
+#pygame.font.init()
+
+# initilize text
+fontBig = pygame.font.SysFont('Comic Sans MS', 80)
+fontSmall = pygame.font.SysFont('Comic Sans MS', 50)
 
 # creates a clock
 clock = pygame.time.Clock()
@@ -50,6 +55,11 @@ def createFood():
     global possiblePos
 
 
+    # update scoretext
+    scoreTxt = fontBig.render(str(score), False, (255, 255, 255))
+    canvas.blit(scoreTxt, (10, 10))
+
+
     if not foodOnMap:
         #create foodposition in center of each grid block 40x40 
         foodPos = (random.choice(possiblePos)+(snakeBlockSize -foodSize)/2,
@@ -69,11 +79,10 @@ def eatFood():
     score += 1
     length += 1
 
+    # add block to snake
     tail.append({'x': tail[-1]['x'], 'y': tail[-1]['y']})
 
 # create snake
-
-
 def drawSnake(dir):
     global x_pos
     global y_pos
@@ -84,25 +93,32 @@ def drawSnake(dir):
     createFood()
 
     if (dir == 'LEFT'):
-        x_pos -= 40
+        x_pos -= gridBlock
         tail.insert(0, {'x': x_pos, 'y': y_pos})
         tail.pop()
     elif (dir == 'RIGHT'):
-        x_pos += 40
+        x_pos += gridBlock
         tail.insert(0, {'x': x_pos, 'y': y_pos})
         tail.pop()
     elif (dir == 'UP'):
-        y_pos -= 40
+        y_pos -= gridBlock
         tail.insert(0, {'x': x_pos, 'y': y_pos})
         tail.pop()
     elif (dir == 'DOWN'):
-        y_pos += 40
+        y_pos += gridBlock
         tail.insert(0, {'x': x_pos, 'y': y_pos})
         tail.pop()
 
     for i in range(0, length):
         pygame.draw.rect(canvas, (255, 255, 255),
                          (tail[i]['x'], tail[i]['y'], snakeBlockSize, snakeBlockSize))
+        if i == 0:
+            continue
+
+        # check if snake collides with tail
+        if (collide(tail[0]['x'], tail[i]['x'], tail[0]['y'], tail[i]['y'], snakeBlockSize, snakeBlockSize, snakeBlockSize, snakeBlockSize)):
+            print('crashed with tail')
+            quitGame()
 
     # check if snake collides with food
     if (collide(tail[0]['x'], foodPos[0], tail[0]['y'], foodPos[1], snakeBlockSize, foodSize, snakeBlockSize, foodSize)):
@@ -112,12 +128,20 @@ def drawSnake(dir):
     if (tail[0]['x'] >= WIDTH-snakeBlockSize or tail[0]['x'] <= 0 or tail[0]['y'] >= HEIGHT-snakeBlockSize or tail[0]['y'] <= 0):
         quitGame()
 
+   
+
 
 def quitGame():
     global running
     length = 3
-    print('U die')
-    #running = False
+    
+    # display text
+    quitText = fontBig.render('Game over', False, (255, 0, 0))
+    scoreTxt = fontSmall.render('Score: ' + str(score), False, (255, 0, 0))
+    canvas.blit(quitText, (WIDTH/2 - quitText.get_rect().width/2, HEIGHT/2-30))
+    canvas.blit(scoreTxt, (WIDTH/2 - scoreTxt.get_rect().width/2, HEIGHT/2+20))
+
+    running = False
     # TODO: Show menu
 
 # check if two elements collide
@@ -152,7 +176,8 @@ while True:
                 pygame.quit()
 
     else:
-        print('hello')
-        break
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
 
     pygame.display.flip()
