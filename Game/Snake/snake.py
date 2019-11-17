@@ -9,8 +9,7 @@ HEIGHT = 600
 # variables
 x_pos = 120
 y_pos = 280
-length = 8
-speed = 0.5
+length = 3
 running = True
 tail = []
 direction = 'RIGHT'
@@ -46,12 +45,17 @@ clock = pygame.time.Clock()
         pygame.draw.rect(canvas, (255,255,255), (i,m,snakeBlockSize,snakeBlockSize),1) """
 
 
-# initialize snake
-for i in range(0, length):
-    tail.append({'x': x_pos-i*40, 'y': y_pos})
-    pygame.draw.rect(canvas, (255, 255, 255),(tail[i]['x'], tail[i]['y'], snakeBlockSize, snakeBlockSize))
+# function to initialize snake
+def initializeSnake(x, y):
+    for i in range(0, length):
+        tail.append({'x': x-i*40, 'y': y})
+        pygame.draw.rect(canvas, (255, 255, 255),(tail[i]['x'], tail[i]['y'], snakeBlockSize, snakeBlockSize))
+
+# initialize snake at start position
+initializeSnake(x_pos, y_pos)
 
 
+# function to create food
 def createFood():
     global foodOnMap
     global foodPos
@@ -66,7 +70,6 @@ def createFood():
         #create foodposition in center of each grid block 40x40 
         foodPos = (random.choice(possiblePos)+(snakeBlockSize -foodSize)/2,
                     random.choice(possiblePos)+(snakeBlockSize-foodSize)/2)
-        print(foodPos)
         foodOnMap = True
     pygame.draw.rect(canvas, (255, 255, 255),
                      (foodPos[0], foodPos[1], foodSize, foodSize))
@@ -135,8 +138,7 @@ def drawSnake(dir):
         quitGame()
 
    
-
-
+# function to quit and pause game
 def quitGame():
     global running
     
@@ -159,13 +161,31 @@ def collide(x1, x2, y1, y2, w1, w2, h1, h2):
 # function to reset game
 def resetGame():
     global running
+    global tail
+    global score
+    global length
+    global x_pos
+    global y_pos
+    global direction
+    global foodOnMap
+
+    # draw background color to blank the screen
+    canvas.fill((0, 0, 0))
 
     # reset variables
-    running = True
+    tail = []
+    foodOnMap = False
     score = 3
     length = 3
     x_pos = 120
     y_pos = 280
+    direction = 'RIGHT'
+
+    # initialize snake at start position
+    initializeSnake(x_pos, y_pos)
+
+    running = True
+    
 
 # game loop
 while True:
@@ -178,17 +198,13 @@ while True:
         # listen for key events
         for e in pygame.event.get():
             if e.type == pygame.KEYDOWN:
-                if (e.key == pygame.K_LEFT):
-                    print('Left')
+                if (e.key == pygame.K_LEFT and direction != 'RIGHT'):
                     direction = 'LEFT'
-                elif (e.key == pygame.K_RIGHT):
-                    print('Right')
+                elif (e.key == pygame.K_RIGHT and direction != 'LEFT'):
                     direction = 'RIGHT'
-                elif (e.key == pygame.K_UP):
-                    print('Up')
+                elif (e.key == pygame.K_UP and direction != 'DOWN'):
                     direction = 'UP'
-                elif (e.key == pygame.K_DOWN):
-                    print('Down')
+                elif (e.key == pygame.K_DOWN and direction != 'UP'):
                     direction = 'DOWN'
 
             if e.type == pygame.QUIT:
