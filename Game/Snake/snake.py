@@ -185,6 +185,20 @@ def resetGame():
     initializeSnake(x_pos, y_pos)
 
     running = True
+
+# function to pause game
+def pauseGame():
+    global running
+
+    running = False
+    pauseTxt = fontBig.render('PAUSED', False, (255, 255, 255))
+    canvas.blit(pauseTxt, (WIDTH/2 - pauseTxt.get_rect().width/2, HEIGHT/2))
+
+# function to resume game
+def resumeGame():
+    global running
+
+    running = True
     
 
 # game loop
@@ -206,6 +220,8 @@ while True:
                     direction = 'UP'
                 elif (e.key == pygame.K_DOWN and direction != 'UP'):
                     direction = 'DOWN'
+                elif (e.key == pygame.K_p):
+                    pauseGame()
 
             if e.type == pygame.QUIT:
                 pygame.quit()
@@ -216,6 +232,8 @@ while True:
             if event.type == pygame.KEYDOWN:
                 if (event.key == pygame.K_RETURN):
                     resetGame()
+                elif (e.key == pygame.K_p):
+                    resumeGame()
             if event.type == pygame.QUIT:
                 pygame.quit()
 

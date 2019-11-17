@@ -47,8 +47,6 @@ clock = pygame.time.Clock()
 
 # function to initialize snake
 def initializeSnake(x, y):
-    print(x)
-    print(y)
     for i in range(0, length):
         tail.append({'x': x-i*40, 'y': y})
         pygame.draw.rect(canvas, (255, 255, 255),
@@ -93,8 +91,6 @@ def eatFood():
     tail.append({'x': tail[-1]['x'], 'y': tail[-1]['y']})
 
 # create snake
-
-
 def drawSnake(dir):
     global x_pos
     global y_pos
@@ -133,7 +129,7 @@ def drawSnake(dir):
 
         # check if snake collides with tail
         if (collide(tail[0]['x'], tail[i]['x'], tail[0]['y'], tail[i]['y'], snakeBlockSize, snakeBlockSize, snakeBlockSize, snakeBlockSize)):
-            quitGame()
+            resetGame()
 
     # check if snake collides with food
     if (collide(tail[0]['x'], foodPos[0], tail[0]['y'], foodPos[1], snakeBlockSize, foodSize, snakeBlockSize, foodSize)):
@@ -141,25 +137,11 @@ def drawSnake(dir):
 
     # check if snake collides with walls
     if (tail[0]['x'] >= WIDTH-snakeBlockSize or tail[0]['x'] <= 0 or tail[0]['y'] >= HEIGHT-snakeBlockSize or tail[0]['y'] <= 0):
-        quitGame()
+        resetGame()
 
-
-# function to quit and pause game
-def quitGame():
-    global running
-
-    # display game over text
-    quitText = fontBig.render('Game over', False, (255, 0, 0))
-    scoreTxt = fontSmall.render('Score: ' + str(score), False, (255, 0, 0))
-    canvas.blit(quitText, (WIDTH/2 - quitText.get_rect().width/2, HEIGHT/2-30))
-    canvas.blit(scoreTxt, (WIDTH/2 - scoreTxt.get_rect().width/2, HEIGHT/2+20))
-
-    running = False
 
 # function to check if two objects collide
 # returns boolean
-
-
 def collide(x1, x2, y1, y2, w1, w2, h1, h2):
     if (x1+w1 > x2 and x1 < x2+w2 and y1+h1 > y2 and y1 < y2+h2):
         return True
@@ -167,8 +149,6 @@ def collide(x1, x2, y1, y2, w1, w2, h1, h2):
         return False
 
 # function to reset game
-
-
 def resetGame():
     global running
     global tail
@@ -178,9 +158,6 @@ def resetGame():
     global y_pos
     global direction
     global foodOnMap
-
-    # draw background color to blank the screen
-    canvas.fill((0, 0, 0))
 
     # reset variables
     tail = []
@@ -194,8 +171,19 @@ def resetGame():
     # initialize snake at start position
     initializeSnake(x_pos, y_pos)
 
-    running = True
+# function to pause game
+def pauseGame():
+    global running
 
+    running = False
+    pauseTxt = fontBig.render('PAUSED', False, (255, 255, 255))
+    canvas.blit(pauseTxt, (WIDTH/2 - pauseTxt.get_rect().width/2, HEIGHT/2))
+
+# function to resume game
+def resumeGame():
+    global running
+
+    running = True
 
 # game loop
 while True:
@@ -216,6 +204,8 @@ while True:
                     direction = 'UP'
                 elif (e.key == pygame.K_DOWN and direction != 'UP'):
                     direction = 'DOWN'
+                elif (e.key == pygame.K_p):
+                    pauseGame()
 
             if e.type == pygame.QUIT:
                 pygame.quit()
@@ -224,8 +214,8 @@ while True:
     else:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
-                if (event.key == pygame.K_RETURN):
-                    resetGame()
+                if (e.key == pygame.K_p):
+                      resumeGame()
             if event.type == pygame.QUIT:
                 pygame.quit()
 
