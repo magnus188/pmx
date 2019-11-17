@@ -175,8 +175,8 @@ def resetGame():
     # reset variables
     tail = []
     foodOnMap = False
-    score = 3
     length = 3
+    score = length
     x_pos = 120
     y_pos = 280
     direction = 'RIGHT'
