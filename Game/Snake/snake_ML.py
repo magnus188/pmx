@@ -49,7 +49,8 @@ clock = pygame.time.Clock()
 # initialize snake
 for i in range(0, length):
     tail.append({'x': x_pos-i*40, 'y': y_pos})
-    pygame.draw.rect(canvas, (255, 255, 255),(tail[i]['x'], tail[i]['y'], snakeBlockSize, snakeBlockSize))
+    pygame.draw.rect(canvas, (255, 255, 255),
+                     (tail[i]['x'], tail[i]['y'], snakeBlockSize, snakeBlockSize))
 
 
 def createFood():
@@ -63,9 +64,9 @@ def createFood():
 
     # if no food on screen, make new food
     if not foodOnMap:
-        #create foodposition in center of each grid block 40x40 
-        foodPos = (random.choice(possiblePos)+(snakeBlockSize -foodSize)/2,
-                    random.choice(possiblePos)+(snakeBlockSize-foodSize)/2)
+        #create foodposition in center of each grid block 40x40
+        foodPos = (random.choice(possiblePos)+(snakeBlockSize - foodSize)/2,
+                   random.choice(possiblePos)+(snakeBlockSize-foodSize)/2)
         print(foodPos)
         foodOnMap = True
     pygame.draw.rect(canvas, (255, 255, 255),
@@ -86,6 +87,8 @@ def eatFood():
     tail.append({'x': tail[-1]['x'], 'y': tail[-1]['y']})
 
 # create snake
+
+
 def drawSnake(dir):
     global x_pos
     global y_pos
@@ -117,7 +120,7 @@ def drawSnake(dir):
     for i in range(0, length):
         pygame.draw.rect(canvas, (255, 255, 255),
                          (tail[i]['x'], tail[i]['y'], snakeBlockSize, snakeBlockSize))
-        
+
         # skip first block of the snake
         if i == 0:
             continue
@@ -134,12 +137,10 @@ def drawSnake(dir):
     if (tail[0]['x'] >= WIDTH-snakeBlockSize or tail[0]['x'] <= 0 or tail[0]['y'] >= HEIGHT-snakeBlockSize or tail[0]['y'] <= 0):
         quitGame()
 
-   
-
 
 def quitGame():
     global running
-    
+
     # display game over text
     quitText = fontBig.render('Game over', False, (255, 0, 0))
     scoreTxt = fontSmall.render('Score: ' + str(score), False, (255, 0, 0))
@@ -150,6 +151,8 @@ def quitGame():
 
 # function to check if two objects collide
 # returns boolean
+
+
 def collide(x1, x2, y1, y2, w1, w2, h1, h2):
     if (x1+w1 > x2 and x1 < x2+w2 and y1+h1 > y2 and y1 < y2+h2):
         return True
@@ -157,6 +160,8 @@ def collide(x1, x2, y1, y2, w1, w2, h1, h2):
         return False
 
 # function to reset game
+
+
 def resetGame():
     global running
 
@@ -166,6 +171,7 @@ def resetGame():
     length = 3
     x_pos = 120
     y_pos = 280
+
 
 # game loop
 while True:
