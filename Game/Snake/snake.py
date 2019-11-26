@@ -71,7 +71,7 @@ def createFood():
         foodPos = (random.choice(possiblePos)+(snakeBlockSize -foodSize)/2,
                     random.choice(possiblePos)+(snakeBlockSize-foodSize)/2)
         foodOnMap = True
-    pygame.draw.rect(canvas, (255, 255, 255),
+    pygame.draw.rect(canvas, (255, 0, 0),
                      (foodPos[0], foodPos[1], foodSize, foodSize))
 
 
@@ -145,7 +145,7 @@ def quitGame():
     # display game over text
     quitText = fontBig.render('Game over', False, (255, 0, 0))
     scoreTxt = fontSmall.render('Score: ' + str(score), False, (255, 0, 0))
-    canvas.blit(quitText, (WIDTH/2 - quitText.get_rect().width/2, HEIGHT/2-30))
+    canvas.blit(quitText, (WIDTH/2 - quitText.get_rect().width/2, HEIGHT/2-60))
     canvas.blit(scoreTxt, (WIDTH/2 - scoreTxt.get_rect().width/2, HEIGHT/2+20))
 
     running = False
