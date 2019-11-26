@@ -1,4 +1,4 @@
-import pygame
+import pygame, sys
 import random
 import math
 
@@ -197,7 +197,6 @@ def pauseGame():
 # function to resume game
 def resumeGame():
     global running
-
     running = True
     
 
@@ -225,6 +224,7 @@ while True:
 
             if e.type == pygame.QUIT:
                 pygame.quit()
+                sys.exit()
 
     # game is not running, freeze game
     else:
