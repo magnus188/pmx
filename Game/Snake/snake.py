@@ -16,9 +16,11 @@ direction = 'RIGHT'
 foodSize = 20
 snakeBlockSize = 35
 gridBlock = 40
-score = length
+score = 0
 foodPos = (200, 200)
 foodOnMap = False
+
+
 
 # creates list of possible positions of food
 # consists of values of products in "40 gangern"
@@ -134,7 +136,7 @@ def drawSnake(dir):
         eatFood()
 
     # check if snake collides with walls
-    if (tail[0]['x'] >= WIDTH-snakeBlockSize or tail[0]['x'] <= 0 or tail[0]['y'] >= HEIGHT-snakeBlockSize or tail[0]['y'] <= 0):
+    if (tail[0]['x'] >= WIDTH-2*snakeBlockSize or tail[0]['x'] <= 0 or tail[0]['y'] >= HEIGHT-2*snakeBlockSize or tail[0]['y'] <= 0):
         quitGame()
 
    
@@ -176,7 +178,7 @@ def resetGame():
     tail = []
     foodOnMap = False
     length = 3
-    score = length
+    score = 0
     x_pos = 120
     y_pos = 280
     direction = 'RIGHT'
