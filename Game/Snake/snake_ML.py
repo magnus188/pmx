@@ -1,6 +1,7 @@
 import pygame
 import random
 import math
+import numpy as np
 
 # window size
 WIDTH = 600
@@ -25,7 +26,7 @@ foodOnMap = False
 possiblePos = [x for x in range(0, WIDTH-gridBlock) if x % gridBlock == 0]
 
 # Frames pr second
-FPS = 8
+FPS = 3
 
 pygame.init()
 canvas = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -70,11 +71,11 @@ def createFood():
     # if no food on screen, make new food
     if not foodOnMap:
         #create foodposition in center of each grid block 40x40
-        foodPos = (random.choice(possiblePos)+(snakeBlockSize - foodSize)/2,
-                   random.choice(possiblePos)+(snakeBlockSize-foodSize)/2)
+        foodPos = (random.choice(possiblePos),
+                   random.choice(possiblePos))
         foodOnMap = True
-    pygame.draw.rect(canvas, (255, 255, 255),
-                     (foodPos[0], foodPos[1], foodSize, foodSize))
+    pygame.draw.rect(canvas, (255, 0, 0),
+                     (foodPos[0], foodPos[1], snakeBlockSize, snakeBlockSize))
 
 
 # function to be called if snake eats food
@@ -101,6 +102,8 @@ def drawSnake(dir):
 
     # create new food
     createFood()
+
+    print(directionToObject((x_pos,y_pos), foodPos))
 
     if (dir == 'LEFT'):
         x_pos -= gridBlock
@@ -147,6 +150,33 @@ def collide(x1, x2, y1, y2, w1, w2, h1, h2):
         return True
     else:
         return False
+
+# returns direction to food
+def directionToObject(snake_pos, object_pos):
+    distance = np.array(object_pos)-np.array(snake_pos)
+    idx = (np.abs(distance - 0)).argmin()
+    #FIXME:
+    if (idx == 0 and distance[idx] < 0):
+        return 'DOWN1'
+    elif (idx == 0 and distance[idx] > 0):
+        return 'UP1'
+    elif (idx == 1 and distance[idx] > 0):
+        return 'LEFT1'
+    elif (idx == 1 and distance[idx] < 0):
+        return 'RIGHT1'
+    elif (distance[0] == 0 and distance[1] < 0 ):
+        return 'LEFT2'
+    elif (distance[0] == 0 and distance[1] > 0 ):
+        return 'RIGHT2'
+    elif (distance[1] == 0 and distance[1] < 0 ):
+        return 'DOWN2'
+    elif (distance[1] == 0 and distance[1] > 0 ):
+        return 'UP2'
+    else:
+        return distance
+    
+    
+
 
 # function to reset game
 def resetGame():
