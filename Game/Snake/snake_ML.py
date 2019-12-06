@@ -175,8 +175,6 @@ def directionToObject(snake_pos, object_pos):
     else:
         return distance
     
-    
-
 
 # function to reset game
 def resetGame():
