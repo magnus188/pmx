@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+import pygame, sys
+>>>>>>> 60b45e9ee232167e13782066c5d31375a1a0faa0
 import random
 import math
 import pygame
@@ -16,9 +20,11 @@ direction = 'RIGHT'
 foodSize = 20
 snakeBlockSize = 35
 gridBlock = 40
-score = length
+score = 0
 foodPos = (200, 200)
 foodOnMap = False
+
+
 
 # creates list of possible positions of food
 # consists of values of products in "40 gangern"
@@ -74,7 +80,7 @@ def createFood():
         foodPos = (random.choice(possiblePos)+(snakeBlockSize - foodSize)/2,
                    random.choice(possiblePos)+(snakeBlockSize-foodSize)/2)
         foodOnMap = True
-    pygame.draw.rect(canvas, (255, 255, 255),
+    pygame.draw.rect(canvas, (255, 0, 0),
                      (foodPos[0], foodPos[1], foodSize, foodSize))
 
 
@@ -138,7 +144,7 @@ def drawSnake(dir):
         eatFood()
 
     # check if snake collides with walls
-    if (tail[0]['x'] >= WIDTH-snakeBlockSize or tail[0]['x'] <= 0 or tail[0]['y'] >= HEIGHT-snakeBlockSize or tail[0]['y'] <= 0):
+    if (tail[0]['x'] > WIDTH-snakeBlockSize or tail[0]['x'] < 0 or tail[0]['y'] > HEIGHT-snakeBlockSize or tail[0]['y'] < 0):
         quitGame()
 
 
@@ -149,7 +155,7 @@ def quitGame():
     # display game over text
     quitText = fontBig.render('Game over', False, (255, 0, 0))
     scoreTxt = fontSmall.render('Score: ' + str(score), False, (255, 0, 0))
-    canvas.blit(quitText, (WIDTH/2 - quitText.get_rect().width/2, HEIGHT/2-30))
+    canvas.blit(quitText, (WIDTH/2 - quitText.get_rect().width/2, HEIGHT/2-60))
     canvas.blit(scoreTxt, (WIDTH/2 - scoreTxt.get_rect().width/2, HEIGHT/2+20))
 
     running = False
@@ -182,7 +188,7 @@ def resetGame():
     tail = []
     foodOnMap = False
     length = 3
-    score = length
+    score = 0
     x_pos = 120
     y_pos = 280
     direction = 'RIGHT'
@@ -232,6 +238,7 @@ while True:
 
             if e.type == pygame.QUIT:
                 pygame.quit()
+                sys.exit()
 
     # game is not running, freeze game
     else:
