@@ -1,6 +1,6 @@
-import pygame
 import random
 import math
+import pygame
 
 # window size
 WIDTH = 600
@@ -30,7 +30,7 @@ FPS = 8
 pygame.init()
 canvas = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('SNAKE')
-#pygame.font.init()
+pygame.font.init()
 
 # initilize text
 fontBig = pygame.font.SysFont('Comic Sans MS', 80)
@@ -39,7 +39,7 @@ fontSmall = pygame.font.SysFont('Comic Sans MS', 50)
 # creates a clock
 clock = pygame.time.Clock()
 
-#create grid
+# create grid
 """ for i in range(0, WIDTH, 40):
     for m in range(0,WIDTH, 40):
         pygame.draw.rect(canvas, (255,255,255), (i,m,snakeBlockSize,snakeBlockSize),1) """
@@ -47,9 +47,12 @@ clock = pygame.time.Clock()
 
 # function to initialize snake
 def initializeSnake(x, y):
+    print('initilizing')
     for i in range(0, length):
         tail.append({'x': x-i*40, 'y': y})
-        pygame.draw.rect(canvas, (255, 255, 255),(tail[i]['x'], tail[i]['y'], snakeBlockSize, snakeBlockSize))
+        pygame.draw.rect(canvas, (255, 255, 255),
+                         (tail[i]['x'], tail[i]['y'], snakeBlockSize, snakeBlockSize))
+
 
 # initialize snake at start position
 initializeSnake(x_pos, y_pos)
@@ -67,9 +70,9 @@ def createFood():
 
     # if no food on screen, make new food
     if not foodOnMap:
-        #create foodposition in center of each grid block 40x40 
-        foodPos = (random.choice(possiblePos)+(snakeBlockSize -foodSize)/2,
-                    random.choice(possiblePos)+(snakeBlockSize-foodSize)/2)
+        # create foodposition in center of each grid block 40x40
+        foodPos = (random.choice(possiblePos)+(snakeBlockSize - foodSize)/2,
+                   random.choice(possiblePos)+(snakeBlockSize-foodSize)/2)
         foodOnMap = True
     pygame.draw.rect(canvas, (255, 255, 255),
                      (foodPos[0], foodPos[1], foodSize, foodSize))
@@ -87,6 +90,7 @@ def eatFood():
 
     # add block to snake
     tail.append({'x': tail[-1]['x'], 'y': tail[-1]['y']})
+
 
 # create snake
 def drawSnake(dir):
@@ -120,7 +124,7 @@ def drawSnake(dir):
     for i in range(0, length):
         pygame.draw.rect(canvas, (255, 255, 255),
                          (tail[i]['x'], tail[i]['y'], snakeBlockSize, snakeBlockSize))
-        
+
         # skip first block of the snake
         if i == 0:
             continue
@@ -137,11 +141,11 @@ def drawSnake(dir):
     if (tail[0]['x'] >= WIDTH-snakeBlockSize or tail[0]['x'] <= 0 or tail[0]['y'] >= HEIGHT-snakeBlockSize or tail[0]['y'] <= 0):
         quitGame()
 
-   
+
 # function to quit and pause game
 def quitGame():
     global running
-    
+
     # display game over text
     quitText = fontBig.render('Game over', False, (255, 0, 0))
     scoreTxt = fontSmall.render('Score: ' + str(score), False, (255, 0, 0))
@@ -150,6 +154,7 @@ def quitGame():
 
     running = False
 
+
 # function to check if two objects collide
 # returns boolean
 def collide(x1, x2, y1, y2, w1, w2, h1, h2):
@@ -157,6 +162,7 @@ def collide(x1, x2, y1, y2, w1, w2, h1, h2):
         return True
     else:
         return False
+
 
 # function to reset game
 def resetGame():
@@ -186,6 +192,7 @@ def resetGame():
 
     running = True
 
+
 # function to pause game
 def pauseGame():
     global running
@@ -194,12 +201,12 @@ def pauseGame():
     pauseTxt = fontBig.render('PAUSED', False, (255, 255, 255))
     canvas.blit(pauseTxt, (WIDTH/2 - pauseTxt.get_rect().width/2, HEIGHT/2))
 
+
 # function to resume game
 def resumeGame():
     global running
-
     running = True
-    
+
 
 # game loop
 while True:
