@@ -1,7 +1,6 @@
-<<<<<<< HEAD
-=======
-import pygame, sys
->>>>>>> 60b45e9ee232167e13782066c5d31375a1a0faa0
+# imports
+import pygame
+import sys
 import random
 import math
 import pygame
@@ -10,7 +9,7 @@ import pygame
 WIDTH = 600
 HEIGHT = 600
 
-# variables
+# declaring global variables
 x_pos = 120
 y_pos = 280
 length = 3
@@ -25,7 +24,6 @@ foodPos = (200, 200)
 foodOnMap = False
 
 
-
 # creates list of possible positions of food
 # consists of values of products in "40 gangern"
 possiblePos = [x for x in range(0, WIDTH-gridBlock) if x % gridBlock == 0]
@@ -33,19 +31,20 @@ possiblePos = [x for x in range(0, WIDTH-gridBlock) if x % gridBlock == 0]
 # Frames pr second
 FPS = 8
 
+# initialize pygame
 pygame.init()
 canvas = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('SNAKE')
-pygame.font.init()
 
 # initilize text
+pygame.font.init()
 fontBig = pygame.font.SysFont('Comic Sans MS', 80)
 fontSmall = pygame.font.SysFont('Comic Sans MS', 50)
 
 # creates a clock
 clock = pygame.time.Clock()
 
-# create grid
+# create grid (for demonstrational purposes)
 """ for i in range(0, WIDTH, 40):
     for m in range(0,WIDTH, 40):
         pygame.draw.rect(canvas, (255,255,255), (i,m,snakeBlockSize,snakeBlockSize),1) """
@@ -90,6 +89,7 @@ def eatFood():
     global length
     global foodOnMap
 
+    # updates variables
     foodOnMap = False
     score += 1
     length += 1
@@ -110,6 +110,7 @@ def drawSnake(dir):
     # create new food
     createFood()
 
+    # check current direction and update snake position
     if (dir == 'LEFT'):
         x_pos -= gridBlock
         tail.insert(0, {'x': x_pos, 'y': y_pos})
@@ -127,6 +128,7 @@ def drawSnake(dir):
         tail.insert(0, {'x': x_pos, 'y': y_pos})
         tail.pop()
 
+    # draw updated snake
     for i in range(0, length):
         pygame.draw.rect(canvas, (255, 255, 255),
                          (tail[i]['x'], tail[i]['y'], snakeBlockSize, snakeBlockSize))
@@ -184,7 +186,7 @@ def resetGame():
     # draw background color to blank the screen
     canvas.fill((0, 0, 0))
 
-    # reset variables
+    # reset variables for new game
     tail = []
     foodOnMap = False
     length = 3
@@ -202,8 +204,9 @@ def resetGame():
 # function to pause game
 def pauseGame():
     global running
-
     running = False
+    
+    # display pause text
     pauseTxt = fontBig.render('PAUSED', False, (255, 255, 255))
     canvas.blit(pauseTxt, (WIDTH/2 - pauseTxt.get_rect().width/2, HEIGHT/2))
 
