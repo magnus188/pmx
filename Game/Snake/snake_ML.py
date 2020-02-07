@@ -1,7 +1,11 @@
-import pygame
+# https://medium.com/machine-learning-for-humans/reinforcement-learning-6eacf258b265
+# https://italolelis.com/snake
+
+
+
+import pygame, sys
 import random
 import math
-import numpy as np
 
 # window size
 WIDTH = 600
@@ -17,21 +21,23 @@ direction = 'RIGHT'
 foodSize = 20
 snakeBlockSize = 35
 gridBlock = 40
-score = length
+score = 0
 foodPos = (200, 200)
 foodOnMap = False
+
+
 
 # creates list of possible positions of food
 # consists of values of products in "40 gangern"
 possiblePos = [x for x in range(0, WIDTH-gridBlock) if x % gridBlock == 0]
 
 # Frames pr second
-FPS = 3
+FPS = 8
 
 pygame.init()
 canvas = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('SNAKE')
-#pygame.font.init()
+pygame.font.init()
 
 # initilize text
 fontBig = pygame.font.SysFont('Comic Sans MS', 80)
@@ -50,9 +56,7 @@ clock = pygame.time.Clock()
 def initializeSnake(x, y):
     for i in range(0, length):
         tail.append({'x': x-i*40, 'y': y})
-        pygame.draw.rect(canvas, (255, 255, 255),
-                         (tail[i]['x'], tail[i]['y'], snakeBlockSize, snakeBlockSize))
-
+        pygame.draw.rect(canvas, (255, 255, 255),(tail[i]['x'], tail[i]['y'], snakeBlockSize, snakeBlockSize))
 
 # initialize snake at start position
 initializeSnake(x_pos, y_pos)
@@ -70,12 +74,12 @@ def createFood():
 
     # if no food on screen, make new food
     if not foodOnMap:
-        #create foodposition in center of each grid block 40x40
-        foodPos = (random.choice(possiblePos),
-                   random.choice(possiblePos))
+        #create foodposition in center of each grid block 40x40 
+        foodPos = (random.choice(possiblePos)+(snakeBlockSize -foodSize)/2,
+                    random.choice(possiblePos)+(snakeBlockSize-foodSize)/2)
         foodOnMap = True
     pygame.draw.rect(canvas, (255, 0, 0),
-                     (foodPos[0], foodPos[1], snakeBlockSize, snakeBlockSize))
+                     (foodPos[0], foodPos[1], foodSize, foodSize))
 
 
 # function to be called if snake eats food
@@ -103,8 +107,6 @@ def drawSnake(dir):
     # create new food
     createFood()
 
-    print(directionToObject((x_pos,y_pos), foodPos))
-
     if (dir == 'LEFT'):
         x_pos -= gridBlock
         tail.insert(0, {'x': x_pos, 'y': y_pos})
@@ -125,23 +127,37 @@ def drawSnake(dir):
     for i in range(0, length):
         pygame.draw.rect(canvas, (255, 255, 255),
                          (tail[i]['x'], tail[i]['y'], snakeBlockSize, snakeBlockSize))
-
+        
         # skip first block of the snake
         if i == 0:
             continue
 
         # check if snake collides with tail
         if (collide(tail[0]['x'], tail[i]['x'], tail[0]['y'], tail[i]['y'], snakeBlockSize, snakeBlockSize, snakeBlockSize, snakeBlockSize)):
-            resetGame()
+            quitGame()
 
     # check if snake collides with food
     if (collide(tail[0]['x'], foodPos[0], tail[0]['y'], foodPos[1], snakeBlockSize, foodSize, snakeBlockSize, foodSize)):
         eatFood()
 
     # check if snake collides with walls
-    if (tail[0]['x'] >= WIDTH-snakeBlockSize or tail[0]['x'] <= 0 or tail[0]['y'] >= HEIGHT-snakeBlockSize or tail[0]['y'] <= 0):
-        resetGame()
+    if (tail[0]['x'] > WIDTH-snakeBlockSize or tail[0]['x'] < 0 or tail[0]['y'] > HEIGHT-snakeBlockSize or tail[0]['y'] < 0):
+        quitGame()
 
+   
+# function to quit and pause game
+def quitGame():
+    global running
+    
+    # display game over text
+    quitText = fontBig.render('Game over', False, (255, 0, 0))
+    scoreTxt = fontSmall.render('Score: ' + str(score), False, (255, 0, 0))
+    infoTxt = fontSmall.render('Press enter to retry',False, (255,255,255))
+    canvas.blit(quitText, (WIDTH/2 - quitText.get_rect().width/2, HEIGHT/2-60))
+    canvas.blit(scoreTxt, (WIDTH/2 - scoreTxt.get_rect().width/2, HEIGHT/2+20))
+    #canvas.blit(infoTxt, (WIDTH/2 - infoTxt.get_rect().width/2, HEIGHT/2+80))
+
+    running = False
 
 # function to check if two objects collide
 # returns boolean
@@ -150,31 +166,6 @@ def collide(x1, x2, y1, y2, w1, w2, h1, h2):
         return True
     else:
         return False
-
-# returns direction to food
-def directionToObject(snake_pos, object_pos):
-    distance = np.array(object_pos)-np.array(snake_pos)
-    idx = (np.abs(distance - 0)).argmin()
-    #FIXME:
-    if (idx == 0 and distance[idx] < 0):
-        return 'DOWN1'
-    elif (idx == 0 and distance[idx] > 0):
-        return 'UP1'
-    elif (idx == 1 and distance[idx] > 0):
-        return 'LEFT1'
-    elif (idx == 1 and distance[idx] < 0):
-        return 'RIGHT1'
-    elif (distance[0] == 0 and distance[1] < 0 ):
-        return 'LEFT2'
-    elif (distance[0] == 0 and distance[1] > 0 ):
-        return 'RIGHT2'
-    elif (distance[1] == 0 and distance[1] < 0 ):
-        return 'DOWN2'
-    elif (distance[1] == 0 and distance[1] > 0 ):
-        return 'UP2'
-    else:
-        return distance
-    
 
 # function to reset game
 def resetGame():
@@ -187,17 +178,22 @@ def resetGame():
     global direction
     global foodOnMap
 
+    # draw background color to blank the screen
+    canvas.fill((0, 0, 0))
+
     # reset variables
     tail = []
     foodOnMap = False
-    score = 3
     length = 3
+    score = 0
     x_pos = 120
     y_pos = 280
     direction = 'RIGHT'
 
     # initialize snake at start position
     initializeSnake(x_pos, y_pos)
+
+    running = True
 
 # function to pause game
 def pauseGame():
@@ -210,8 +206,8 @@ def pauseGame():
 # function to resume game
 def resumeGame():
     global running
-
     running = True
+    
 
 # game loop
 while True:
@@ -237,13 +233,16 @@ while True:
 
             if e.type == pygame.QUIT:
                 pygame.quit()
+                sys.exit()
 
     # game is not running, freeze game
     else:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
-                if (e.key == pygame.K_p):
-                      resumeGame()
+                if (event.key == pygame.K_RETURN):
+                    resetGame()
+                elif (e.key == pygame.K_p):
+                    resumeGame()
             if event.type == pygame.QUIT:
                 pygame.quit()
 
