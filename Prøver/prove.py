@@ -9,8 +9,9 @@ def convert(s):
     for x in s:
         new += x  
     return str.capitalize(new)
+    
 
-# function to create poem, returns nil but prints output
+# function to create poem, returns null but prints output
 def createPoem(word:str, author:str, iterations:int):
     print('\''+ word + '\' by', author)
     permutations = set()
