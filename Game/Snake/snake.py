@@ -157,8 +157,10 @@ def quitGame():
     # display game over text
     quitText = fontBig.render('Game over', False, (255, 0, 0))
     scoreTxt = fontSmall.render('Score: ' + str(score), False, (255, 0, 0))
+    infoTxt = fontSmall.render('Press enter to retry',False, (255,255,255))
     canvas.blit(quitText, (WIDTH/2 - quitText.get_rect().width/2, HEIGHT/2-60))
     canvas.blit(scoreTxt, (WIDTH/2 - scoreTxt.get_rect().width/2, HEIGHT/2+20))
+    canvas.blit(infoTxt, (WIDTH/2 - infoTxt.get_rect().width/2, HEIGHT/2+80))
 
     running = False
 

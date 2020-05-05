@@ -7,9 +7,13 @@ print("Welcome to hangman")
 word = RandomWords().get_random_word()
 hiddenWord = ""
 lives = 8
+guessedLetters = set()
+
 
 for i in range(len(word)):
     hiddenWord += "_"
+    print("_",end=" ")
+print("\n")
 
 def convert(s): 
     new = ""   
@@ -29,24 +33,32 @@ while "_" in hiddenWord:
         break
     else:
         if (userInput in word and userInput not in hiddenWord):
+            guessedLetters.add(userInput)
             for match in re.finditer(userInput, word):
                 s = list(hiddenWord)
                 s[match.start()] = userInput
                 hiddenWord = convert(s)
-                print("\n")
-                print(" ".join(hiddenWord))
-        elif(userInput in word):
+            print("\n")
+            print(" ".join(hiddenWord))
+        elif(userInput in guessedLetters):
             print("\nYou have already guessed this letter")
+            print("\n")
+            print(" ".join(hiddenWord))
             pass
         else:
-            if(lives == 0):
+            if(lives-1 == 0):
+                lives -=1
                 print("You loose")
+                print("The word was:", word)
                 break
             else:
+                guessedLetters.add(userInput)
                 lives -= 1
                 print("\nWrong guess\nLives left:", lives)
+                print("\n")
+                print(" ".join(hiddenWord))
 
-
-print("You won with", lives, "lives left")
+if lives > 0:
+    print("You won with", lives, "lives left")
          
 
