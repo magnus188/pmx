@@ -3,7 +3,7 @@ import numpy as np
 
 deltaX = 10**-8
 iterations = 10000
-x = np.linspace(0, 10, 6)
+x = np.linspace(0, 10, 6) # Hvorfor??
 
 
 # Define function

@@ -26,8 +26,8 @@ for baggage in baggages:
 # Sort array by kiloprice
 baggages = sorted(baggages, key = lambda i: i['kiloPrice'])
 
-for n in baggages:
-    print(n)
+
+
 for baggage in baggages:
     # If space for bag, append bags
     if (sumWeight + baggage["weight"] <= maxWeight):
