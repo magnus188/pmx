@@ -15,8 +15,4 @@ def fder(x):
     return 5*x**4 - 15*x**2
 
 # Newtons Metode
-while i <= N and abs(f(c)) >= tol:
-    c = a = a - f(a)/fder(a)
-    i += 1
-
-print(c)
+print(newtonsMetode(a, tol, N, f, fder))

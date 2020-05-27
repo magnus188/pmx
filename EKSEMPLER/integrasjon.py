@@ -5,8 +5,6 @@ endValue = 5
 iterations = 10000  # Amount of Rectangles/Trapes ...
 
 # Define function
-
-
 def f(x):
     return 2*x**2+x-5
 
