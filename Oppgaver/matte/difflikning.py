@@ -3,7 +3,7 @@ import numpy as np
 
 y = [1]
 x = [0]
-yder =[1]
+yder = [1]
 deltaX = 1
 
 def calculate(x_1):

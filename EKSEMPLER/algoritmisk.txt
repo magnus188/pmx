@@ -1,0 +1,9 @@
+Momenter som skal med
+
+    1. Dele opp problemet i delproblemer; analyse
+
+    2. Sette sammen små biter til en helhet; syntese
+
+    3. Forstå og behandle abstrakte enheter og tanker; abstraksjon
+
+    4. Anvende logikk og struktur på etterfølgende instruksjoner; algoritme

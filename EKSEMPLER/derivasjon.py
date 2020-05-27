@@ -1,15 +1,16 @@
 from MTmathLib import *
-import numpy as np
+import pylab as pl
 
-deltaX = 10**-8
+deltaX = 1E-8
 iterations = 10000
-x = np.linspace(0, 10, 6) # Hvorfor??
+x = pl.linspace(2, 5, 3) 
 
 
 # Define function
 def f(x):
-    return 2*x**2+x-5
+    return 2*x+1
 
 
 print("Newtons Kvotient: ", newtonsKvotient(f, x, deltaX))
 print("Newtons Symmetriske: ", newtonsSymmetriske(f, x, deltaX))
+

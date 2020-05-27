@@ -9,16 +9,14 @@ i = 0
 # Funksjonen
 def f(x):
     return x**5 - 5*x**3 -3
-
-
+                                                      
 # Derivert funksjon
 def fder(x):
     return 5*x**4 - 15*x**2
 
 # Newtons Metode
 while i <= N and abs(f(c)) >= tol:
-    c = a - f(a)/fder(a)
-    a = c
+    c = a = a - f(a)/fder(a)
     i += 1
 
 print(c)
